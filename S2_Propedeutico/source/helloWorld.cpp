@@ -7,6 +7,8 @@ string my_string_2="Good bye world!";
 uint8_t my_var=5;
 uint8_t *p= &my_var;
 int my_int=5;
+double my_double=2.2;
+
 
 //int my_func(int a);
 
