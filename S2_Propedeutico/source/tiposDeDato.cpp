@@ -16,6 +16,6 @@ int main(){
 
     cout << myfunc(5) << endl;
     double var=5;
-    return 0;
+    return 1;
 }
 
