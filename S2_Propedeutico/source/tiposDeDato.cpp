@@ -1,6 +1,10 @@
 #include <iostream>
 using namespace std;
 
+int myfunc(int a){
+    return 5+a;
+}
+
 int main(){
 
     cout << "Tamaño en bytes de <char>: " << sizeof(char) << endl;
@@ -10,9 +14,8 @@ int main(){
     cout << "Tamaño en bytes de <long>: " << sizeof(long) << endl;
     cout << "Tamaño en bytes de <double>: " << sizeof(double) << endl;
 
+    cout << myfunc(5) << endl;
+
     return 0;
 }
 
-int myfunc(){
-    return 
-}
