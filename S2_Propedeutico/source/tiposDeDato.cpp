@@ -15,6 +15,7 @@ int main(){
     cout << "Tamaño en bytes de <double>: " << sizeof(double) << endl;
 
     cout << myfunc(5) << endl;
+    cout << "Probando el pull" << endl;
     double var=5;
     return 1;
 }
