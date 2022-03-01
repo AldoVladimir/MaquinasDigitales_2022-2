@@ -1,0 +1,22 @@
+Paso 0:
+Usamos "git fetch" para traer la información de los cambios en el repositorio remoto.
+
+Paso 1:
+Utilizamos estos comandos para crear un "nuevo comando" llamado "lg" que es una versión mejorada de "log"
+git config --global alias.lg log --oneline --decorate --all --graph //Linux
+git config --global alias.lg "log --oneline --decorate --all --graph" //Windows
+
+Paso 2:
+Nos dimos cuenta que alguien hizo actualizaciones en el repositorio remoto y está un commit enfrente de nosotros
+git lg
+
+Paso 3:
+Hacemos la actualización del repositorio local
+git pull
+
+Paso 4:
+Hacer una rama
+git branch [nombre de la rama]
+
+ver ramas
+git branch -l
