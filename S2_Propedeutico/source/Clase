@@ -20,3 +20,19 @@ git branch [nombre de la rama]
 
 ver ramas
 git branch -l
+
+Paso 5:
+Para cambiarnos de rama usamos 
+git checkout [rama]
+
+Paso 6:
+Hacer commit dentro de la rama nueva
+
+Paso 7:
+Me cambio a la rama main y corroboro que los cambios que hice en la rama secundaria no se encuentran ahí
+git checkout main
+
+Paso 8:
+Fusionar rama_1 a la rama principal
+git checkout main
+git merge [rama a fusionar]
