@@ -5,8 +5,10 @@
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
 
-
+const int PAYLOAD_SIZE = 50;
 const int LED_BT = 33;
+char payload[PAYLOAD_SIZE]; 
+
 
 BluetoothSerial SerialBT;
 boolean confirmRequestPending = true;
@@ -52,25 +54,31 @@ void setup() {
 
 
 void loop() {
+  
    if (confirmRequestPending){
     if (Serial.available()){
       int dat = Serial.read();
-      if (dat == 'Y' || dat == 'y'){
-        SerialBT.confirmReply(true);
+      //int dat = 'y'; //Hardcoded paring aproval
+      if (dat == 'Y' || dat == 'y'){     
+        SerialBT.confirmReply(true);      
       }
       else{
         SerialBT.confirmReply(false);
       }
     }
   }
-  else{    
-      if (Serial.available()) {
-        SerialBT.write(Serial.read());
+  else{   
+  
+      if (Serial.available()) {        
+        Serial.readBytesUntil('\n',payload,PAYLOAD_SIZE);
+        SerialBT.println(payload);
       }
-      if (SerialBT.available()) {
-        Serial.write(SerialBT.read());
+      if (SerialBT.available()) { 
+        SerialBT.readBytesUntil('\n',payload,PAYLOAD_SIZE);
+        Serial.println(payload);
       }
       delay(20);
+      
   } 
 
 }
