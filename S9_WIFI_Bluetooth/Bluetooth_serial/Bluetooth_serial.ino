@@ -8,7 +8,6 @@ const int LED_SENSOR = 32;
 const int LED_BT = 33;
 const int LED_BT_PARING = 26;
 const int PAIRING_BUTTON = 4;
-
 const int PHOTO = 34;
 
 Adafruit_BME280 bme;
