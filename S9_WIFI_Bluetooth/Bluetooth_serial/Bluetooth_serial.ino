@@ -4,7 +4,6 @@
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
-
 const int LED_SENSOR = 32;
 const int LED_BT = 33;
 const int LED_BT_PARING = 26;
@@ -42,8 +41,7 @@ void BTAuthCompleteCallback(boolean success)
 
 void setup() {
   Serial.begin(115200);
-  Serial.flush();
-
+  //Serial.flush();
   
   bme.begin(0x76);
 
@@ -58,44 +56,42 @@ void setup() {
   SerialBT.onAuthComplete(BTAuthCompleteCallback);
   
   SerialBT.begin("Axolote_ESP32"); //Bluetooth device name
-  SerialBT.flush();
+  //SerialBT.flush();
   
   //Serial.println("The device started, now you can pair it with bluetooth!");
 }
 
 void loop() {
   //Si se mantiene el botón presionado, busca vincularse con otro dispositivo BT
-  confirmRequestPending = digitalRead(PAIRING_BUTTON);
+  confirmRequestPending = digitalRead(PAIRING_BUTTON); //Si no esta presionado el boton = false
   if (confirmRequestPending){
     digitalWrite(LED_BT_PARING,HIGH);
     delay(10);
-    //if (Serial.available()){
+    if (Serial.available()){
       //Serial.println("Waiting for pairing!!");
-      //int dat = Serial.read();      
-      //if (dat == 'Y' || dat == 'y'){
-      if (digitalRead(PAIRING_BUTTON)){
+      int dat = Serial.read();      
+      if (dat == 'Y' || dat == 'y'){
+      //if (digitalRead(PAIRING_BUTTON)){
         SerialBT.confirmReply(true);
       }
       else{
         SerialBT.confirmReply(false);
       }
-    //}
+    }
     digitalWrite(LED_BT_PARING,LOW);
     delay(10);
   }
-
-
-  digitalWrite(LED_SENSOR,HIGH); //Prende cuando empiece a leer
-  sprintf(payload,"%04d,%06.2f",analogRead(PHOTO),bme.readPressure()/100); //Parecido a .format de Python
-  digitalWrite(LED_SENSOR,LOW); //Prende cuando empiece a leer
-
-  digitalWrite(LED_BT,HIGH); //Prende cuando empiece a escribir
-  Serial.println(payload); //Manda por serial lo que se va a escribir por Bluetooth
-  SerialBT.println(payload); //Envía por BT
-  digitalWrite(LED_BT,LOW); //Apaga el LED cuando termina 
   
+  else{
+    digitalWrite(LED_SENSOR,HIGH); //Prende cuando empiece a leer
+    sprintf(payload,"%04d,%06.2f",analogRead(PHOTO),bme.readPressure()/100); //Parecido a .format de Python
+    digitalWrite(LED_SENSOR,LOW); //Prende cuando empiece a leer
+  
+    digitalWrite(LED_BT,HIGH); //Prende cuando empiece a escribir
+    Serial.println(payload); //Manda por serial lo que se va a escribir por Bluetooth
+    SerialBT.println(payload); //Envía por BT
+    digitalWrite(LED_BT,LOW); //Apaga el LED cuando termina 
+  }
   
   delay(100);
- 
-
 }
