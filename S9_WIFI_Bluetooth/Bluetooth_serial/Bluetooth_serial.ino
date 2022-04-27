@@ -66,17 +66,17 @@ void loop() {
   if (confirmRequestPending){
     digitalWrite(LED_BT_PARING,HIGH);
     delay(10);
-    if (Serial.available()){
+    //if (Serial.available()){
       //Serial.println("Waiting for pairing!!");
-      int dat = Serial.read();      
-      if (dat == 'Y' || dat == 'y'){
+      //int dat = Serial.read();      
+      //if (dat == 'Y' || dat == 'y'){
       //if (digitalRead(PAIRING_BUTTON)){
         SerialBT.confirmReply(true);
-      }
-      else{
-        SerialBT.confirmReply(false);
-      }
-    }
+     // }
+      //else{
+       // SerialBT.confirmReply(false);
+      //}
+    //}
     digitalWrite(LED_BT_PARING,LOW);
     delay(10);
   }
