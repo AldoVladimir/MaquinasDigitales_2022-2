@@ -1,3 +1,5 @@
+clear
+clc
 %% Setup del puerto serie
 %Búsqueda de todos los puertos serie
 %serialportlist
@@ -5,13 +7,15 @@
 
 %% Conexion
 %Asignar un objeto serial y su tasa de baudios
-if (ispc)
-    %s=serialport("COM4",115200)
-    s = bluetooth("Axolote_ESP32")
-else
-    s=serialport("/dev/ttyUSB0",115200)
+if ~exist('s','var')
+    if (ispc)
+        %s=serialport("COM4",115200)
+        s = bluetooth("Axolote_ESP32")
+    else
+        s=serialport("/dev/ttyUSB0",115200)
+    end
+    configureTerminator(s,"CR/LF")
 end
-configureTerminator(s,"CR/LF")
 %% Setup de la captura
 %Nombre de la variable
 name="bluetoothSerial_AxoloteESP32";
@@ -29,11 +33,11 @@ ax=gca;
 ax.YGrid='on';
 
 %Tiempo durante el cual se va a medir
-measureTime=seconds(10);
+measureTime=seconds(60);
 t=seconds(0);
 
 %Longitud de la lectura
-numReads = 5; %Cantidad de lecturas antes de dibujar. Recomendado: Valor grande para tasa de muestreo alta
+numReads = 20; %Cantidad de lecturas antes de dibujar. Recomendado: Valor grande para tasa de muestreo alta
 numCols = 2; %Numero de variables capturadas
 data = zeros(numReads,numCols); %Matriz de datos temporales
 n=0:numReads-1; %Vector de número de muestra
@@ -81,7 +85,7 @@ end
 time=startTime:(endTime-startTime)/(numel(dataPoints)-1):endTime;
 Ts=seconds(endTime-startTime)/numel(dataPoints); %Periodo de muestreo [s]
 fs=1/Ts; %Frecuencia de muestreo[Hz]
-%% Guardar en ASCII
+%% Guardar en excel
 %writematrix(dataPoints',"./Output/"+datestr(startTime)+"_fs"+fs+"Hz_"+name+".xlsx");
 %Falta agregar fecha automatica
 writematrix(dataPoints',".\output\"+datestr(startTime,'yyyy.mm.dd_HHMMSS')+name+".xlsx");

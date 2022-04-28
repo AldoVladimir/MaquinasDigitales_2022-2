@@ -92,5 +92,5 @@ void loop() {
     digitalWrite(LED_BT,LOW); //Apaga el LED cuando termina 
   }
   
-  delay(1);
+  delay(10);
 }
