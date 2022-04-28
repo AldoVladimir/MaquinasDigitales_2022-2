@@ -1,7 +1,7 @@
 %% Setup del puerto serie
 %Búsqueda de todos los puertos serie
-serialportlist
-bluetoothlist
+%serialportlist
+%bluetoothlist
 
 %% Conexion
 %Asignar un objeto serial y su tasa de baudios
@@ -14,11 +14,14 @@ end
 configureTerminator(s,"CR/LF")
 %% Setup de la captura
 %Nombre de la variable
-name="analogRead";
+name="bluetoothSerial_AxoloteESP32";
+%Un "Figure" por cada ventana que se necesite
 figure('Name',name,'NumberTitle','off');
 
 %Crea objeto de línea animada
+%Una linea animada por cada variable
 %Añadir conforme se necesiten más
+%Linea animada es mucho más rapida que plot
 h=animatedline;
 
 %Coloca líneas paralelas al plot
@@ -26,11 +29,11 @@ ax=gca;
 ax.YGrid='on';
 
 %Tiempo durante el cual se va a medir
-measureTime=seconds(60);
+measureTime=seconds(10);
 t=seconds(0);
 
 %Longitud de la lectura
-numReads = 5; %Cantidad de lecturas antes de dibujar. Recomendado: Valor grande para taza de muestreo alta
+numReads = 5; %Cantidad de lecturas antes de dibujar. Recomendado: Valor grande para tasa de muestreo alta
 numCols = 2; %Numero de variables capturadas
 data = zeros(numReads,numCols); %Matriz de datos temporales
 n=0:numReads-1; %Vector de número de muestra
@@ -69,3 +72,16 @@ while t<=measureTime  %Grabado con tiempo fijo
    t=endTime-startTime;   
    title("Elapsed Time: "+seconds(t)+"s");
 end
+%% Guardado de datos
+
+%Obtención de los datos desde la linea animada
+[~,dataPoints] = getpoints(h);
+
+%Vector de tiempo total
+time=startTime:(endTime-startTime)/(numel(dataPoints)-1):endTime;
+Ts=seconds(endTime-startTime)/numel(dataPoints); %Periodo de muestreo [s]
+fs=1/Ts; %Frecuencia de muestreo[Hz]
+%% Guardar en ASCII
+%writematrix(dataPoints',"./Output/"+datestr(startTime)+"_fs"+fs+"Hz_"+name+".xlsx");
+%Falta agregar fecha automatica
+writematrix(dataPoints',".\output\"+name+".xlsx");
