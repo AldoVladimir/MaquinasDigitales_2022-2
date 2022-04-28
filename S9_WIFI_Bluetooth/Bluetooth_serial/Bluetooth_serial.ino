@@ -82,15 +82,15 @@ void loop() {
   }
   
   else{
-    digitalWrite(LED_SENSOR,HIGH); //Prende cuando empiece a leer
+    //digitalWrite(LED_SENSOR,HIGH); //Prende cuando empiece a leer
     sprintf(payload,"%04d,%06.2f",analogRead(PHOTO),bme.readPressure()/100); //Parecido a .format de Python
-    digitalWrite(LED_SENSOR,LOW); //Prende cuando empiece a leer
+    //digitalWrite(LED_SENSOR,LOW); //Prende cuando empiece a leer
   
     digitalWrite(LED_BT,HIGH); //Prende cuando empiece a escribir
-    Serial.println(payload); //Manda por serial lo que se va a escribir por Bluetooth
+    //Serial.println(payload); //Manda por serial lo que se va a escribir por Bluetooth
     SerialBT.println(payload); //Envía por BT
     digitalWrite(LED_BT,LOW); //Apaga el LED cuando termina 
   }
   
-  delay(100);
+  delay(1);
 }

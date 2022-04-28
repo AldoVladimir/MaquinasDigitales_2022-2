@@ -84,4 +84,4 @@ fs=1/Ts; %Frecuencia de muestreo[Hz]
 %% Guardar en ASCII
 %writematrix(dataPoints',"./Output/"+datestr(startTime)+"_fs"+fs+"Hz_"+name+".xlsx");
 %Falta agregar fecha automatica
-writematrix(dataPoints',".\output\"+name+".xlsx");
+writematrix(dataPoints',".\output\"+datestr(startTime,'yyyy.mm.dd_HHMMSS')+name+".xlsx");
