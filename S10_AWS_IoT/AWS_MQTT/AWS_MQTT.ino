@@ -1,7 +1,9 @@
 #include <AWS_IOT.h>
 #include <WiFi.h>
 #include <Adafruit_BME280.h>
+//#include <Adafruit_BMP280.h> //Alumnos
 
+//------MODIFICAR CON TUS PARAMETROS
 //Wifi & AWS Parameters
 #define WIFI_SSID "Red del Mago HF" // SSID of your WIFI
 #define WIFI_PASSWORD "2659512562" //your wifi password
@@ -13,9 +15,12 @@
 #define SERVICE_MAX 5 //Retries to publish data to AWS
 #define DELAY_MINUTES 5 //Tiempo de retraso entre cada medicion
 
+//------MODIFICAR CON TUS PARAMETROS
 const int PHOTO = 34;
 const int LED_CONNECTION = 26;
 Adafruit_BME280 bme;
+//Adafruit_BMP280 bme; //Alumnos
+
 AWS_IOT aws;
 
 
