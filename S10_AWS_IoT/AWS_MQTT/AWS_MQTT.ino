@@ -1,5 +1,6 @@
 #include <AWS_IOT.h>
 #include <WiFi.h>
+#include <Adafruit_BME280.h>
 
 //Wifi & AWS Parameters
 #define WIFI_SSID "Red del Mago HF" // SSID of your WIFI
@@ -8,49 +9,99 @@
 #define MQTT_TOPIC "$aws/things/Axolote_ESP32_Aldo/shadow/update" //topic for the MQTT data
 #define AWS_HOST "a9zwczf1oqpq2-ats.iot.us-east-1.amazonaws.com" // your host for uploading data to AWS,
 
+#define WIFI_MAX 200 //Retries to connecto to WiFi
+#define SERVICE_MAX 5 //Retries to publish data to AWS
+#define DELAY_MINUTES 5 //Tiempo de retraso entre cada medicion
+
+const int PHOTO = 34;
+const int LED_CONNECTION = 26;
+Adafruit_BME280 bme;
 AWS_IOT aws;
+
 
 char payload [300];
 bool status = WL_IDLE_STATUS;
 
 void setup() {
   Serial.begin(115200);
+  bme.begin(0x76);
 
-  //Conexion WiFi
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  while (WiFi.status() != WL_CONNECTED) {
-      delay(500);
-      Serial.print(".");
-  }
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
-  Serial.println("Connected to wifi");
-
-  //Conexion AWS
-  if(aws.connect(AWS_HOST,CLIENT_ID)== 0){// Connect to AWS using Host Address and Cliend ID
-      Serial.println("Connected to AWS");
-      delay(1000);
-  }
-  else{
-      Serial.println("AWS connection failed, Check the HOST Address");
-      while(1);
-  }
-
+  pinMode(LED_CONNECTION,OUTPUT);
+  digitalWrite(LED_CONNECTION,LOW); 
 }
 
 void loop() {
 
-  sprintf(payload,"%s","Hello World!");
-  Serial.println("Publishing:- ");
-  Serial.println(payload);
+  //Lecturas en formato JSON
+  sprintf(payload,"{"
+  "\"deviceID\":\"AxoloteESP32_Aldo\","
+  "\"Press_hPa\":%06.2f,"
+  "\"Luz_adim\":%04d"  
+  "}",bme.readPressure()/100,analogRead(PHOTO)); 
 
-  while(!aws.publish(MQTT_TOPIC, payload) == 0){// publishes payload and returns 0 upon success. 
+
+  //Conexión y publicación
+  digitalWrite(LED_CONNECTION,HIGH);  
+    
+    //Conexion WiFi
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    int count=0;
+    while (!(WiFi.status() == WL_CONNECTED || count >=WIFI_MAX)) {
       Serial.print(".");
-      delay(50);
-  }
-  Serial.println("Success!");   
-   
-  delay(1000);
+      count++;
+      delay(500);
+    }
+     if(count<=WIFI_MAX){
+      Serial.println("  ");
+      Serial.println("Connected to WiFi\n");
+     }
+     else{
+        Serial.println("Failed!\n");
+        digitalWrite(LED_CONNECTION,LOW); 
+        ESP.restart();
+     }
+    
+    Serial.println("");
+    Serial.println("WiFi connected");
+    Serial.println("IP address: ");
+    Serial.println(WiFi.localIP());
+    Serial.println("Connected to wifi");
+  
+    //Conexion AWS
+    if(aws.connect(AWS_HOST,CLIENT_ID)== 0){// Connect to AWS using Host Address and Cliend ID
+        Serial.println("Connected to AWS");
+        delay(1000);
+    }
+    else{
+        Serial.println("AWS connection failed, Check the HOST Address");
+        Serial.println("Resetting");
+        digitalWrite(LED_CONNECTION,LOW); 
+        ESP.restart();      
+    }   
+      
+    //AWS publish
+    Serial.println("Publishing:- ");
+    Serial.println(payload);
+    count=0;
+    while(!(aws.publish(MQTT_TOPIC, payload) == 0 || count >=SERVICE_MAX)){// publishes payload and returns 0 upon success. 
+        Serial.print(".");
+        count++;
+        delay(100);
+    }
+    if(count<SERVICE_MAX){
+        Serial.println("Published!\n");
+     }
+     // If failed to publish, reset MCU
+     else{
+        Serial.println("Failed!\n");
+        Serial.println("Resetting");
+        digitalWrite(LED_CONNECTION,LOW); 
+        ESP.restart();
+     }   
+
+     
+  digitalWrite(LED_CONNECTION,LOW); 
+  
+  delay(1000*60*DELAY_MINUTES);
+  ESP.restart();
 }
