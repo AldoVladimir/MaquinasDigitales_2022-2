@@ -12,7 +12,7 @@
 #define AWS_HOST "a9zwczf1oqpq2-ats.iot.us-east-1.amazonaws.com" // your host for uploading data to AWS,
 
 #define WIFI_MAX 200 //Retries to connecto to WiFi
-#define SERVICE_MAX 5 //Retries to publish data to AWS
+#define SERVICE_MAX 10 //Retries to publish data to AWS
 #define DELAY_MINUTES 5 //Tiempo de retraso entre cada medicion
 
 //------MODIFICAR CON TUS PARAMETROS
@@ -40,8 +40,8 @@ void loop() {
   //Lecturas en formato JSON
   sprintf(payload,"{"
   "\"deviceID\":\"AxoloteESP32_Aldo\","
-  "\"Press_hPa\":%06.2f,"
-  "\"Luz_adim\":%04d"  
+  "\"Press_hPa\":%.2f,"
+  "\"Luz_adim\":%d"  
   "}",bme.readPressure()/100,analogRead(PHOTO)); 
 
 
