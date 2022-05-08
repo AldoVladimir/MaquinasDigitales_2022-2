@@ -56,7 +56,7 @@ void loop() {
       count++;
       delay(500);
     }
-     if(count<=WIFI_MAX){
+     if(count<WIFI_MAX){
       Serial.println("  ");
       Serial.println("Connected to WiFi\n");
      }
