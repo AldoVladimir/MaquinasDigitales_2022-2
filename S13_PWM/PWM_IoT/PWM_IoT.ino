@@ -114,7 +114,7 @@ void loop() {
 
     case 6:    
       dutyCycle = 0.5*sin(2*PI*t/256)+0.5;
-      delay(0.5);
+      delay(1);
     break;
 
     case 7:    

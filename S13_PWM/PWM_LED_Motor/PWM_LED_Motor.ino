@@ -7,9 +7,9 @@ const int PWM_RESOLUTION = 8; //Profundidad de bits
 const int BUTTON = 4;
 
 
-float t;
-int  waveform = 0;
-float dutyCycle;
+float t; //Tiempo
+int  waveform = 0; //Menú de formas de onda para modular el ciclo de trabajo
+float dutyCycle; //Que tan grande es el pulso - 100% Prendido todo el tiempo y 0% Apagado todo el tiempo
 
 void setup() {
   Serial.begin(115200);
