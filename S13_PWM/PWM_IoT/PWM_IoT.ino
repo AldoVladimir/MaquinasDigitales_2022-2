@@ -18,7 +18,7 @@ float dutyCycle;
 #define WIFI_SSID "Red del Mago HF" // SSID of your WIFI
 #define WIFI_PASSWORD "2659512562" //your wifi password
 #define CLIENT_ID "Axolote_ESP32_Aldo"// thing unique ID, this id should be unique among all things associated with your AWS account.
-#define MQTT_TOPIC "$aws/things/Axolote_ESP32_Aldo/shadow/accepted" //topic for the MQTT data
+#define MQTT_TOPIC "$aws/things/Axolote_ESP32_Aldo/shadow/PWM" //topic for the MQTT data
 #define AWS_HOST "a9zwczf1oqpq2-ats.iot.us-east-1.amazonaws.com" // your host for uploading data to AWS,
 
 int rc;
@@ -27,9 +27,9 @@ char rcvdPayload [10];
 AWS_IOT aws;
 
 
-void mySubCallBackHandler (char *topicName, int payloadLen, char *payLoad)
-{
+void mySubCallBackHandler (char *topicName, int payloadLen, char *payLoad){
   waveform = atoi(payLoad);
+  //digitalWrite(PIN,bool(payload));
 }
 
 void setup() {
@@ -127,6 +127,5 @@ void loop() {
   //Serial.println(dutyCycle*100);
   
   //Envia señal PWM al pin seleccionado
-  ledcWrite(PWM_CHANNEL, dutyCycle*255);
-  
+  ledcWrite(PWM_CHANNEL, dutyCycle*255);  
 }

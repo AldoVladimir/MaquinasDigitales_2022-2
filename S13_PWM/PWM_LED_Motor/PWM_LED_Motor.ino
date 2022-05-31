@@ -32,7 +32,9 @@ void loop() {
      Serial.println(waveform);  
      delay(300);  
   }
+  //Volverlo interrupción
 
+  
   //Tiempo del ciclo
   t++;  
   if(t>=256) {
