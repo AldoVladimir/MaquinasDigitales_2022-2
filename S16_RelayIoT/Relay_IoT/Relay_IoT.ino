@@ -1,14 +1,14 @@
 #include <AWS_IOT.h>
 #include <WiFi.h>
 
-#define RELAY_PIN 8
+#define RELAY_PIN 12
 
 //------MODIFICAR CON TUS PARAMETROS
 //Wifi & AWS Parameters
-#define WIFI_SSID "nombre_de_mi_red" // SSID of your WIFI
-#define WIFI_PASSWORD "_passw_de_mi_red" //your wifi password
-#define CLIENT_ID "Axolote_ESP32_"// thing unique ID, this id should be unique among all things associated with your AWS account.
-#define MQTT_TOPIC "$aws/things/Axolote_ESP32_/shadow/PWM" //topic for the MQTT data
+#define WIFI_SSID "Red del Mago HF" // SSID of your WIFI
+#define WIFI_PASSWORD "2659512562" //your wifi password
+#define CLIENT_ID "Axolote_ESP32_Aldo"// thing unique ID, this id should be unique among all things associated with your AWS account.
+#define MQTT_TOPIC "$aws/things/Axolote_ESP32_Aldo/shadow/relay" //topic for the MQTT data
 #define AWS_HOST "a9zwczf1oqpq2-ats.iot.us-east-1.amazonaws.com" // your host for uploading data to AWS,
 
 int rc;
@@ -18,11 +18,15 @@ AWS_IOT aws;
 
 
 void mySubCallBackHandler (char *topicName, int payloadLen, char *payLoad){
-  Serial.println("Cambiando estado del relevador.");
-  digitalWrite(RELAY_PIN, atoi(payLoad));
+
+  if (atoi(payLoad)){digitalWrite(RELAY_PIN,HIGH);}
+  else{digitalWrite(RELAY_PIN,LOW);}
+  
 }
 
 void setup() {
+  
+  pinMode(RELAY_PIN,OUTPUT);
   Serial.begin(115200);
 
   //Conexion WiFi
@@ -59,5 +63,5 @@ void setup() {
 }
 
 void loop() {
-
+  //delay(10);
 }
