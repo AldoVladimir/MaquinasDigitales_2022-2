@@ -1,6 +1,5 @@
 #include <TinyGPSPlus.h>
 
-
 // The TinyGPSPlus object
 TinyGPSPlus gps;
 
